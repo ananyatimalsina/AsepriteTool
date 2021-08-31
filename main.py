@@ -30,11 +30,18 @@ while 1:
         else:
             print("Install mode detected.")
             subprocess.call(["Install.bat"])
-            skia_path = str(input("Please enter the path of the downloaded skia.zip File: "))
+            skia_path = str(input("Please enter the path of the downloaded Skia.zip File: "))
+            ninja_path = str(input("Please enter the path of the downloaded Ninja.zip File: "))
 
             try:
                 with zipfile.ZipFile(skia_path, "r") as zf:
                     zf.extractall("C:/deps/skia")
+            except Exception as e:
+                print(e)
+
+            try:
+                with zipfile.ZipFile(ninja_path, "r") as zf:
+                    zf.extractall("C:/Program Files/CMake/bin")
             except Exception as e:
                 print(e)
 
