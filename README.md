@@ -11,4 +11,4 @@ Skia - https://github.com/aseprite/skia/releases
 
 CMake - (https://cmake.org/download/) On Installer select Add to path for all Users
 
-Ninja - (https://github.com/ninja-build/ninja/releases) Unzip The File and Copy Ninja.exe to CmakeInstallLocation/bin
+Ninja - (https://github.com/ninja-build/ninja/releases)
