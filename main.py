@@ -53,7 +53,7 @@ while 1:
             else:
                 print("Install mode detected.")
 
-                subprocess.call(["Install32.bat"])
+                subprocess.call(["Install.bat"])
 
                 skia_path = str(input("Please enter the path of the downloaded Skia.zip File: "))
                 ninja_path = str(input("Please enter the path of the downloaded Ninja.zip File: "))
