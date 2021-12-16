@@ -1,4 +1,4 @@
-set PATH=%PATH%;%CD%\Git\bin\
+set PATH=%PATH%;%CD%\Git\cmd\
 cd C:\
 git clone --recursive https://github.com/aseprite/aseprite.git
 mkdir deps
