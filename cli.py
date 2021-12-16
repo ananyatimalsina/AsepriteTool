@@ -102,8 +102,6 @@ while 1:
         print("Desktop Development with C++ and on Individual Items")
         print("(Check on Aseprites guide: https://github.com/aseprite/aseprite/blob/main/INSTALL.md under Windows dependencies)")
         print("")
-        print("Git - https://git-scm.com/download/win Check Add to Path")
-        print("")
         print("CMake - (https://cmake.org/download/) On Installer select Add to path for all Users")
         print("")
         print("Skia - https://github.com/aseprite/skia/releases")
