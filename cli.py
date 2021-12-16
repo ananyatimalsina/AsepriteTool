@@ -2,14 +2,10 @@ import os
 import sys
 import subprocess
 import zipfile
-import ctypes
 
 first = True
 command = "req"
 InstallMode = "Auto"
-
-if ctypes.windll.shell32.IsUserAnAdmin()  == False:
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__.join(sys.argv[1:]), None, 1)
 
 def change_install_mode(mode):
     InstallMode = mode
