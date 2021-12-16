@@ -5,8 +5,6 @@ When you first open the programm, there are a few requierments:
 
 Visual Studio - (https://visualstudio.microsoft.com/) On the Installer select Desktop Development with C++ and on Individual Items (Check on Aseprites guide: https://github.com/aseprite/aseprite/blob/main/INSTALL.md under Windows dependencies).
 
-GitForWindows - (https://gitforwindows.org/) Leave evreything on Default.
-
 Skia - https://github.com/aseprite/skia/releases
 
 CMake - (https://cmake.org/download/) On Installer select Add to path for all Users
