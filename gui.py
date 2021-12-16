@@ -1,10 +1,14 @@
 from pathlib import Path
-from PIL import ImageTk, Image
+from PIL import ImageTk
 from tkinter import *
 from tkinter import messagebox
 import subprocess
 import os
 import zipfile
+import ctypes, sys
+
+if ctypes.windll.shell32.IsUserAnAdmin()  == False:
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__.join(sys.argv[1:]), None, 1)
 
 class MyOptionMenu(OptionMenu):
     def __init__(self, master, status, *options):
