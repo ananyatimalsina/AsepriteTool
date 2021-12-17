@@ -2,10 +2,28 @@ import os
 import sys
 import subprocess
 import zipfile
+import requests
 
 first = True
 command = "req"
 InstallMode = "Auto"
+
+if os.path.isfile("First.txt"):
+
+    with open("First.txt", "r") as f:
+        url = f.read()
+
+    r = requests.get(url)
+
+    os.mkdir("Git")
+
+    open("Git.zip", "wb").write(r.content)
+
+    with zipfile.ZipFile("Git.zip", "r") as zf:
+        zf.extractall("Git")
+
+    os.remove("Git.zip")
+    os.remove("First.txt")
 
 def change_install_mode(mode):
     InstallMode = mode

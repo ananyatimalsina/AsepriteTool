@@ -5,6 +5,24 @@ from tkinter import messagebox
 import subprocess
 import os
 import zipfile
+import requests
+
+if os.path.isfile("First.txt"):
+
+    with open("First.txt", "r") as f:
+        url = f.read()
+
+    r = requests.get(url)
+
+    os.mkdir("Git")
+
+    open("Git.zip", "wb").write(r.content)
+
+    with zipfile.ZipFile("Git.zip", "r") as zf:
+        zf.extractall("Git")
+
+    os.remove("Git.zip")
+    os.remove("First.txt")
 
 class MyOptionMenu(OptionMenu):
     def __init__(self, master, status, *options):
