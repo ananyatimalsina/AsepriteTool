@@ -9,6 +9,9 @@ import requests
 
 if os.path.isfile("First.txt"):
 
+    if os.path.isdir("Git"):
+        os.remove("Git")
+
     with open("First.txt", "r") as f:
         url = f.read()
 
@@ -24,19 +27,11 @@ if os.path.isfile("First.txt"):
     os.remove("Git.zip")
     os.remove("First.txt")
 
-class MyOptionMenu(OptionMenu):
-    def __init__(self, master, status, *options):
-        self.var = StringVar(master)
-        self.img = ImageTk.PhotoImage(file=relative_to_assets("button_1.png")) #replace with your own indicator image
-        self.var.set(status)
-        OptionMenu.__init__(self, master, self.var, *options)
-        self.config(indicatoron=0, image = self.img, font=('calibri',(10)),bg='white',width=12)
-        self['menu'].config(font=('calibri',(10)),bg='white')
-
 class MyDialog:
     def __init__(self, parent, ttt):
         top = self.top = Toplevel(parent)
         top.geometry("200x100")
+        top.iconbitmap("Icon.ico")
         self.myLabel = Label(top, text=ttt)
         self.myLabel.pack()
 
@@ -53,7 +48,6 @@ class MyDialog:
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
-Mode = "Auto"
 
 def Install():
     subprocess.call(["Install.bat"])
@@ -102,7 +96,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def Start():
-    if Mode == "Auto":
+    if Mode.get() == "Auto":
 
         if os.path.isdir("C:/aseprite") and os.path.isdir("C:\deps"):
             Update()
@@ -110,10 +104,10 @@ def Start():
         else:
             Install()
 
-    elif Mode == "Install":
+    elif Mode.get() == "Install":
         Install()
 
-    elif Mode == "Update":
+    elif Mode.get() == "Update":
         Update()
 
 def Help():
@@ -126,6 +120,9 @@ window.geometry("700x800")
 window.configure(bg = "#FFFFFF")
 window.title("AsepriteTool")
 window.iconbitmap("Icon.ico")
+
+Mode = StringVar(window)
+Mode.set("Auto")
 
 canvas = Canvas(
     window,
@@ -149,7 +146,8 @@ image_1 = canvas.create_image(
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
 
-button_1 = MyOptionMenu(window, Mode, "Install", "Update", "Auto")
+button_1 = OptionMenu(window, Mode, "Install", "Update", "Auto")
+button_1.configure(indicatoron = 0, image = button_image_1)
 
 button_1.place(
     x=35.000000000000114,

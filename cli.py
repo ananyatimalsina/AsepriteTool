@@ -10,6 +10,9 @@ InstallMode = "Auto"
 
 if os.path.isfile("First.txt"):
 
+    if os.path.isdir("Git"):
+        os.remove("Git")
+
     with open("First.txt", "r") as f:
         url = f.read()
 
