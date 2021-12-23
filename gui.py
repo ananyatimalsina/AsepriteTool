@@ -2,30 +2,58 @@ from pathlib import Path
 from PIL import ImageTk
 from tkinter import *
 from tkinter import messagebox
+from configparser import ConfigParser
 import subprocess
 import os
 import zipfile
+import sys
 import requests
 
-if os.path.isfile("First.txt"):
+config = ConfigParser()
+
+try:
+    config.read("config.ini")
+    vs_url = str(config["Settings"]["vs_link"])
+    update = config["Settings"]["update"]
+    git_url = config["Settings"]["git_link"]
+    cmake_url = config["Settings"]["cmake_link"]
+
+except Exception as e:
+    messagebox.showerror("Config Error", "Config File Is Corrupted or does not Exist!")
+    sys.exit("Config File Is Corrupted or does not Exist!")
+
+if update == "True":
 
     if os.path.isdir("Git"):
         os.remove("Git")
 
-    with open("First.txt", "r") as f:
-        url = f.read()
-
-    r = requests.get(url)
+    r_vs = requests.get(vs_url)
+    r_git = requests.get(git_url)
+    r_cmake = requests.get(cmake_url)
 
     os.mkdir("Git")
 
-    open("Git.zip", "wb").write(r.content)
+    open("Git.zip", "wb").write(r_git.content)
+    open("vs.exe", "wb").write(r_vs.content)
+    open("cmake.exe", "wb").write(r_cmake.content)
 
     with zipfile.ZipFile("Git.zip", "r") as zf:
         zf.extractall("Git")
 
     os.remove("Git.zip")
-    os.remove("First.txt")
+
+    subprocess.run(["cmake.exe"])
+
+    os.remove("cmake.exe")
+
+    subprocess.run(["vs.exe"])
+
+    os.remove("vs.exe")
+
+    config.set("Settings", "update", "False")
+
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
 
 class MyDialog:
     def __init__(self, parent, ttt):
