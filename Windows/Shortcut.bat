@@ -1,0 +1,1 @@
+shortcut /a:c /f:"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Aseprite.lnk" /t:"C:\aseprite\build\bin\aseprite.exe"
