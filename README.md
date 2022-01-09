@@ -13,4 +13,4 @@ Development with C++ and under Individual Items (Check on Aseprite Guide: https:
 
 Video Guide:
 
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/go0_wiR4WSw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/watch?v=go0_wiR4WSw
