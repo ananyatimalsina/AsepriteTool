@@ -10,3 +10,7 @@ Ninja - (https://github.com/ninja-build/ninja/releases)
 Visual Studio and Cmake will automatically be downloaded. On Cmake dont
 forget to select add to Path for all Users,  and on Visual Studio the Desktop
 Development with C++ and under Individual Items (Check on Aseprite Guide: https://github.com/aseprite/aseprite/blob/main/INSTALL.md#windows-dependencies)
+
+Video Guide:
+
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/go0_wiR4WSw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
