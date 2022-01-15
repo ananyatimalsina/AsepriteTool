@@ -1,9 +1,10 @@
 import os
 import sys
-import subprocess
 from configparser import ConfigParser
 import zipfile
 import requests
+from git import Repo
+import subprocess
 
 first = True
 command = "req"
@@ -12,15 +13,19 @@ InstallMode = "Auto"
 config = ConfigParser()
 
 try:
+    os.environ["GIT_PYTHON_GIT_EXECUTABLE"] = os.getcwd() + "/Git/cmd"
     config.read("config.ini")
     vs_url = str(config["Settings"]["vs_link"])
     update = config["Settings"]["update"]
     git_url = config["Settings"]["git_link"]
     cmake_url = config["Settings"]["cmake_link"]
+    skia_url = config["Settings"]["skia_link"]
+    ninja_url = config["Settings"]["ninja_link"]
+    n_p = config["Settings"]["ninja_path"]
+    aseprite_path = config["Settings"]["aseprite_path"]
 
 except Exception as e:
-    print("Config File Is Corrupted or does not Exist!")
-    sys.exit("Config File Is Corrupted or does not Exist!")
+    print("Config File Is Corrupted or does not Exist!" + e)
 
 if update == "True":
 
@@ -30,23 +35,27 @@ if update == "True":
     r_vs = requests.get(vs_url)
     r_git = requests.get(git_url)
     r_cmake = requests.get(cmake_url)
+    r_skia = requests.get(skia_url)
+    r_ninja = requests.get(ninja_url)
 
     os.mkdir("Git")
 
     open("Git.zip", "wb").write(r_git.content)
     open("vs.exe", "wb").write(r_vs.content)
-    open("cmake.exe", "wb").write(r_cmake.content)
+    open("cmake.msi", "wb").write(r_cmake.content)
+    open("skia.zip", "wb").write(r_skia.content)
+    open("ninja.zip", "wb").write(r_ninja.content)
 
     with zipfile.ZipFile("Git.zip", "r") as zf:
         zf.extractall("Git")
 
     os.remove("Git.zip")
 
-    subprocess.run(["cmake.exe"])
+    os.system("cmake.msi")
 
-    os.remove("cmake.exe")
+    os.remove("cmake.msi")
 
-    subprocess.run(["vs.exe"])
+    os.system("vs.exe")
 
     os.remove("vs.exe")
 
@@ -60,46 +69,89 @@ def change_install_mode(mode):
     print("Success! Install-Mode is now: " + InstallMode)
 
 def Install():
-    subprocess.call(["Install.bat"])
+    Repo.clone_from("https://github.com/aseprite/aseprite.git", aseprite_path + "aseprite", recursive = True)
+    os.mkdir(aseprite_path + "deps")
+    os.mkdir(aseprite_path + "aseprite/build")
 
-    skia_path = str(input("Please enter the path of the downloaded Skia.zip File: "))
-    ninja_path = str(input("Please enter the path of the downloaded Ninja.zip File: "))
+    skia_path = "skia.zip"
+    ninja_path = "ninja.zip"
 
     try:
         with zipfile.ZipFile(skia_path, "r") as zf:
-            zf.extractall("C:/deps/skia")
+            zf.extractall(aseprite_path + "deps/skia")
 
         with zipfile.ZipFile(ninja_path, "r") as zf:
-            zf.extractall("C:/Program Files/CMake/bin")
+            zf.extractall(n_p)
 
     except Exception as e:
-        print(str(e))
+        print(e)
 
     if os.path.isdir("C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools"):
-        subprocess.call(["Compile22.bat"])
+        _extracted_from_Install_21(
+            'call "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+        )
 
     elif os.path.isdir("C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools"):
-        subprocess.call(["Compile19.bat"])
+        _extracted_from_Install_21(
+            'call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+        )
 
     else:
         print("No Visual Studio installation found", "No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
 
-    subprocess.call(["Shortcut.bat"])
+    os.system('shortcut /a:c /f:"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Aseprite.lnk" /t:"' + aseprite_path + 'build/bin/aseprite.exe"')
 
-    print("Done! Finisched Compiling Aseprite! It can be found in C:/aseprite/bin or by searching for aseprite in the star menu")
+    print("Done! Finisched Compiling Aseprite! It can be found by searching for aseprite in the start menu")
+    os.remove("cmd.bat")
+
+# TODO Rename this here and in `Install`
+def _extracted_from_Install_21(arg0):
+    with open("cmd.bat", "w") as f:
+        f.write(arg0 + "\n")
+        f.write("cd " + aseprite_path + "aseprite" + "\n")
+        f.write("mkdir build" + "\n")
+        f.write("cd build" + "\n")
+        f.write("cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=" + aseprite_path + "deps/skia" + " -DSKIA_LIBRARY_DIR=" + aseprite_path + "deps/skia/out/Release-x64" + " -DSKIA_LIBRARY=" + aseprite_path + "deps/skia/out/Release-x64/skia.lib" + " -G Ninja .." + "\n")
+        f.write("ninja aseprite")
+
+    subprocess.call(["cmd.bat"])
 
 def Update():
-    subprocess.call(["Update.bat"])
+    repo = Repo(aseprite_path + "aseprite")
+    o = repo.remotes.origin
+    o.pull()
+
+    for submodule in repo.submodules:
+        submodule.update(init=True, recursive=True)
 
     if os.path.isdir("C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools"):
-        subprocess.call(["Compile22.bat"])
+        _extracted_from_Update_8(
+            'call "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+        )
 
     elif os.path.isdir("C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools"):
-        subprocess.call(["Compile19.bat"])
+        _extracted_from_Update_8(
+            'call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+        )
 
-    subprocess.call(["Shortcut.bat"])
+    else:
+        print("No Visual Studio installation found", "No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
 
-    print("Done! Finisched Compiling Aseprite! It can be found in C:/aseprite/bin or by searching for aseprite in the star menu")
+    os.system('shortcut /a:c /f:"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Aseprite.lnk" /t:"' + aseprite_path + 'build/bin/aseprite.exe"')
+
+    print("Done! Finisched Compiling Aseprite! It can be found by searching for aseprite in the start menu")
+    os.remove("cmd.bat")
+
+# TODO Rename this here and in `Update`
+def _extracted_from_Update_8(arg0):
+    with open("cmd.bat", "w") as f:
+        f.write(arg0 + "\n")
+        f.write("cd " + aseprite_path + "aseprite/build" + "\n")
+        f.write("cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=C:\deps\skia -DSKIA_LIBRARY_DIR=C:\deps\skia\out\Release-x64 -DSKIA_LIBRARY=C:\deps\skia\out\Release-x64\skia.lib -G Ninja .." + "\n")
+        #f.write("cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=" + aseprite_path + "deps/skia" + " -DSKIA_LIBRARY_DIR=" + aseprite_path + "deps/skia/out/Release-x64" + " -DSKIA_LIBRARY=" + aseprite_path + "deps/skia/out/Release-x64/skia.lib" + " -G Ninja .." + "\n")
+        f.write("ninja aseprite")
+
+    subprocess.call(["cmd.bat"])
 
 while 1:
     if first == False:
@@ -130,7 +182,7 @@ while 1:
 
         if InstallMode == "Auto":
 
-            if os.path.isdir("C:/aseprite") and os.path.isdir("C:\deps"):
+            if os.path.isdir(aseprite_path + "aseprite") and os.path.isdir(aseprite_path + "deps"):
                 print("Update Mode detected.")
 
                 Update()
@@ -148,10 +200,6 @@ while 1:
 
     elif command == "req":
         print("Requierments: ")
-        print("")
-        print("Skia - https://github.com/aseprite/skia/releases")
-        print("")
-        print("Ninja - (https://github.com/ninja-build/ninja/releases)")
         print("")
         print("Visual Studio and Cmake will automatically be downloaded. On Cmake dont forget to select add to Path for all Users, and on Visual Studio the Desktop Development with C++ and under Individual Items (Check on Aseprite Guide: https://github.com/aseprite/aseprite/blob/main/INSTALL.md#windows-dependencies)")
 
