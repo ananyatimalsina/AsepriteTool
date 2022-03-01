@@ -5,6 +5,7 @@ import zipfile
 import requests
 import subprocess
 import shutil
+from requests_html import HTML
 
 first = True
 command = "req"
@@ -16,8 +17,6 @@ try:
     config.read("config.ini")
     vs_url = str(config["Settings"]["vs_link"])
     update = config["Settings"]["update"]
-    git_url = config["Settings"]["git_link"]
-    cmake_url = config["Settings"]["cmake_link"]
     skia_url = config["Settings"]["skia_link"]
     ninja_url = config["Settings"]["ninja_link"]
     n_p = config["Settings"]["ninja_path"]
@@ -29,9 +28,26 @@ except Exception as e:
     print("Config File Is Corrupted or does not Exist!" + e)
 
 if update == "True":
-
     if os.path.isdir("Git"):
         shutil.rmtree("Git")
+
+    git_r = requests.get("https://github.com/git-for-windows/git/releases/")
+    git_r = HTML(html=str(git_r.content))
+    git_url = git_r.links
+    for i in git_url:
+        if "MinGit" in i:
+            git_url = i
+            break
+
+    cmake_r = requests.get("https://cmake.org/download/")
+    cmake_r = HTML(html=str(cmake_r.content))
+    cmake_url = cmake_r.links
+    for i in cmake_url:
+        if "windows" in i and "msi" in i:
+            cmake_url = i
+            break
+
+    git_url = "https://github.com" + git_url
 
     r_vs = requests.get(vs_url)
     r_git = requests.get(git_url)
@@ -200,8 +216,12 @@ while 1:
             Update()
 
     elif command == "req":
+        r = requests.get("https://github.com/aseprite/aseprite/blob/main/INSTALL.md#windows-dependencies")
+        sdk = str(r.content).split('Desktop development with C++ item + ', 1)[1]
+        sdk = sdk[:sdk.find('</a>')]
+
         print("Requierments: ")
         print("")
-        print("Visual Studio and Cmake will automatically be downloaded. On Cmake dont forget to select add to Path for all Users, and on Visual Studio the Desktop Development with C++ and under Individual Items (Check on Aseprite Guide: https://github.com/aseprite/aseprite/blob/main/INSTALL.md#windows-dependencies)")
+        print("Visual Studio and Cmake will automatically be downloaded. On Cmake dont forget to select add to Path for all Users, and on Visual Studio the Desktop Development with C++ and under Individual Items " + sdk)
 
         first = False
