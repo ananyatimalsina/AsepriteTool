@@ -9,4 +9,4 @@ Development with C++ and under Individual Items (Check on Aseprite Guide: https:
 
 Video Guide:
 
-https://www.youtube.com/watch?v=go0_wiR4WSw
+https://www.youtube.com/watch?v=4amv2bAWJAA
