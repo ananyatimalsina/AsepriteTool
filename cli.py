@@ -118,6 +118,9 @@ def Install():
             'call "' + p_path + ' (x86)' + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
+    else:
+        print("No Visual Studio installation found", "No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
+
     os.system('shortcut /a:c /f:"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Aseprite.lnk" /t:"' + aseprite_path + 'aseprite/build/bin/aseprite.exe"')
 
     print("Done! Finished Compiling Aseprite! It can be found by searching for aseprite in the start menu")
@@ -143,13 +146,13 @@ def Update():
         f.write("git submodule update --init --recursive")
 
     if os.path.isdir(p_path + "Microsoft Visual Studio/2022/Community/Common7/Tools"):
-        _extracted_from_Update_8(
+        _extracted_from_Install_21(
             'call "' + p_path + 'Microsoft Visual Studio/2022/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
     elif os.path.isdir(p_path + " (x86)" + "/Microsoft Visual Studio/2019/Community/Common7/Tools"):
-        _extracted_from_Update_8(
-            'call "' + p_path + 'Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+        _extracted_from_Install_21(
+            'call "' + p_path + ' (x86)' + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
     else:
