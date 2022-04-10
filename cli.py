@@ -163,16 +163,6 @@ def Update():
     print("Done! Finished Compiling Aseprite! It can be found by searching for aseprite in the start menu")
     os.remove("cmd.bat")
 
-# TODO Rename this here and in `Update`
-def _extracted_from_Update_8(arg0):
-    with open("cmd.bat", "w") as f:
-        f.write(arg0 + "\n")
-        f.write("cd " + aseprite_path + "aseprite/build" + "\n")
-        f.write("cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=" + aseprite_path + "deps/skia" + " -DSKIA_LIBRARY_DIR=" + aseprite_path + "deps/skia/out/Release-x64" + " -DSKIA_LIBRARY=" + aseprite_path + "deps/skia/out/Release-x64/skia.lib" + " -G Ninja .." + "\n")
-        f.write("ninja aseprite")
-
-    subprocess.call(["cmd.bat"])
-
 while 1:
     if first == False:
         command = input("Please Enter a Command: ")
