@@ -35,7 +35,7 @@ if update == "True":
     git_r = HTML(html=str(git_r.content))
     git_url = git_r.links
     for i in git_url:
-        if "MinGit" in i:
+        if "MinGit" in i and "64" in i and not "busybox" in i:
             git_url = i
             break
 
@@ -43,7 +43,7 @@ if update == "True":
     cmake_r = HTML(html=str(cmake_r.content))
     cmake_url = cmake_r.links
     for i in cmake_url:
-        if "windows" in i and "msi" in i:
+        if "windows" in i and "msi" in i and "64" in i:
             cmake_url = i
             break
 
