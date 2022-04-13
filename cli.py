@@ -113,13 +113,13 @@ def Install():
             'call "' + p_path + 'Microsoft Visual Studio/2022/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
-    elif os.path.isdir(p_path + " (x86)" + "/Microsoft Visual Studio/2019/Community/Common7/Tools"):
+    elif os.path.isdir(p_path[:-1] + " (x86)" + "/Microsoft Visual Studio/2019/Community/Common7/Tools"):
         _extracted_from_Install_21(
-            'call "' + p_path + ' (x86)' + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+            'call "' + p_path[:-1] + " (x86)" + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
     else:
-        print("No Visual Studio installation found", "No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
+        print("No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
 
     os.system('shortcut /a:c /f:"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Aseprite.lnk" /t:"' + aseprite_path + 'aseprite/build/bin/aseprite.exe"')
 
@@ -150,13 +150,13 @@ def Update():
             'call "' + p_path + 'Microsoft Visual Studio/2022/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
-    elif os.path.isdir(p_path + " (x86)" + "/Microsoft Visual Studio/2019/Community/Common7/Tools"):
+    elif os.path.isdir(p_path[:-1] + " (x86)" + "/Microsoft Visual Studio/2019/Community/Common7/Tools"):
         _extracted_from_Install_21(
-            'call "' + p_path + ' (x86)' + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
+            'call "' + p_path[:-1] + ' (x86)' + '/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat" -arch=x64'
         )
 
     else:
-        print("No Visual Studio installation found", "No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
+        print("No Visual Studio installation found. Please refer to https://github.com/TheLiteCrafter/AsepriteTool")
 
     os.system('shortcut /a:c /f:"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Aseprite.lnk" /t:"' + aseprite_path + 'aseprite/build/bin/aseprite.exe"')
 
