@@ -6,6 +6,7 @@ import requests
 import subprocess
 import shutil
 from requests_html import HTML
+import elevate
 
 first = True
 command = "req"
@@ -14,6 +15,8 @@ InstallMode = "Auto"
 config = ConfigParser()
 
 try:
+    # TODO Uncomment on release
+    # elevate.elevate()
     config.read("config.ini")
     vs_url = str(config["Settings"]["vs_link"])
     update = config["Settings"]["update"]
@@ -34,10 +37,14 @@ if update == "True":
     git_r = requests.get("https://github.com/git-for-windows/git/releases/")
     git_r = HTML(html=str(git_r.content))
     git_url = git_r.links
+    versions = []
+    links = []
     for i in git_url:
         if "MinGit" in i and "64" in i and not "busybox" in i:
-            git_url = i
-            break
+            versions.append(i.split("MinGit-")[1].split("-")[0].replace(".", ""))
+            links.append(i)
+
+    git_url = links[max(versions)]
 
     cmake_r = requests.get("https://cmake.org/download/")
     cmake_r = HTML(html=str(cmake_r.content))
