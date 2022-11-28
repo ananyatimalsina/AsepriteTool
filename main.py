@@ -179,7 +179,7 @@ while 1:
         print("List of avilable commands:")
         print("help - Shows a List of all avilable commands")
         print("start - Starts the install/update process")
-        print("exit - Exists the programm")
+        print("exit - Exits the programm")
         print("req - Shows all requierments")
         print("InstallMode Auto/Update/Install - Changes the Installation-Mode")
 
