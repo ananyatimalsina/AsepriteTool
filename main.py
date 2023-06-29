@@ -180,7 +180,7 @@ while 1:
         print("help - Shows a List of all avilable commands")
         print("start - Starts the install/update process")
         print("exit - Exits the programm")
-        print("req - Shows all requierments")
+        print("req - Shows all requirements")
         print("InstallMode Auto/Update/Install - Changes the Installation-Mode")
 
     elif command == "installmode auto":
@@ -220,7 +220,7 @@ while 1:
         sdk = str(r.content).split('Desktop development with C++ item + ', 1)[1]
         sdk = sdk[:sdk.find('</a>')]
 
-        print("Requierments: ")
+        print("requirements: ")
         print("")
         print("Visual Studio and Cmake will automatically be downloaded. On Cmake dont forget to select add to Path for all Users, and on Visual Studio the Desktop Development with C++ and under Individual Items " + sdk)
 
